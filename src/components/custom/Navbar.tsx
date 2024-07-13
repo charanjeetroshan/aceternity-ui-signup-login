@@ -10,7 +10,7 @@ export default function Navbar({ className }: { className?: string }) {
             <div className="flex justify-center gap-8">
                <HoveredLink
                   href="#"
-                  className="dark:hover:text-neutral-200 hover:opacity-[0.9]"
+                  className="hover:dark:text-neutral-200 hover:opacity-[0.9]"
                >
                   Home
                </HoveredLink>
