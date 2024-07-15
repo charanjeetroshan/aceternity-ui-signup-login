@@ -6,10 +6,13 @@ type ButtonProps = React.ComponentPropsWithoutRef<"button"> & {
 export default function Button(props: ButtonProps) {
    const { variant, children, ...rest } = props;
 
+   const baseClasses =
+      "w-full py-2 px-12 font-semibold rounded-md text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-60";
+
    if (variant === "filled") {
       return (
          <button
-            className="w-full py-2 px-12 font-semibold rounded-xl bg-blue-600 border border-transparent text-neutral-200 text-sm hover:bg-blue-700 transition-colors"
+            className={`${baseClasses} bg-blue-600 border border-transparent text-neutral-200 hover:bg-blue-700`}
             {...rest}
          >
             {children}
@@ -19,7 +22,10 @@ export default function Button(props: ButtonProps) {
 
    if (variant === "outlined") {
       return (
-         <button className="w-full py-2 px-12 font-semibold rounded-xl text-neutral-200 border border-blue-600  text-sm hover:border-blue-700 transition-colors">
+         <button
+            className={`${baseClasses} text-neutral-200 border border-blue-600 hover:border-blue-700`}
+            {...rest}
+         >
             {children}
          </button>
       );
