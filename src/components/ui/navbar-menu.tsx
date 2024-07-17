@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Link, LinkProps } from "react-router-dom";
 
 const transition = {
    type: "spring",
@@ -22,7 +23,7 @@ export const MenuItem = ({
    children?: React.ReactNode;
 }) => {
    return (
-      <div onMouseEnter={() => setActive(item)} className="relative ">
+      <div onMouseEnter={() => setActive(item)} className="relative">
          <motion.p
             transition={{ duration: 0.3 }}
             className="cursor-pointer text-black hover:opacity-[0.9] dark:text-white"
@@ -40,7 +41,7 @@ export const MenuItem = ({
                      <motion.div
                         transition={transition}
                         layoutId="active" // layoutId ensures smooth animation
-                        className="bg-white dark:bg-slate-950 backdrop-blur-sm rounded-2xl overflow-hidden border border-black/[0.2] dark:border-white/[0.2] shadow-xl"
+                        className="bg-white dark:bg-blue-950 backdrop-blur-sm rounded-2xl overflow-hidden border border-black/[0.2] dark:border-white/[0.2] shadow-xl"
                      >
                         <motion.div
                            layout // layout ensures smooth animation
@@ -67,7 +68,7 @@ export const Menu = ({
    return (
       <nav
          onMouseLeave={() => setActive(null)} // resets the state
-         className="relative rounded-full boder border-transparent dark:bg-slate-950 dark:border-white/[0.2] bg-white shadow-input flex justify-center space-x-4 px-8 py-6 "
+         className="relative border-transparent dark:bg-blue-950 dark:border-white/[0.2] bg-white flex justify-center space-x-4 px-8 py-6 "
       >
          {children}
       </nav>
@@ -104,17 +105,25 @@ export const ProductItem = ({
    );
 };
 
-type HoveredLinkProps = React.ComponentPropsWithoutRef<"a"> & {};
+type HoveredLinkProps = LinkProps & {
+   setActive?: (value: string | null) => void;
+};
 
-export const HoveredLink = ({ children, className, ...rest }: HoveredLinkProps) => {
+export const HoveredLink = ({
+   setActive,
+   children,
+   className,
+   ...props
+}: HoveredLinkProps) => {
    return (
-      <a
-         {...rest}
+      <Link
+         {...props}
+         onMouseEnter={() => setActive && setActive(null)}
          className={`text-neutral-700 dark:text-neutral-200 ${
             className ? className : "hover:dark:text-neutral-400"
          }`}
       >
          {children}
-      </a>
+      </Link>
    );
 };
