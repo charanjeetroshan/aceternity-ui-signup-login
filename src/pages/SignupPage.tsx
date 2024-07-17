@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { cn } from "@/lib/utils";
+import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Button from "@/components/custom/Button";
@@ -9,11 +8,15 @@ import { z } from "zod";
 import { signupSchema } from "@/schemas/signupSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
-import { APIResponse } from "@/types";
+import { APIResponse, User } from "@/types";
 import { Navigate } from "react-router-dom";
+import Container from "@/components/custom/Container";
+import InputErrorMessage from "@/components/custom/InputErrorMessage";
+import { LabelInputContainer } from "@/components/custom/InputLabelContainer";
 
-export function SignupPage() {
+export default function SignupPage() {
    const [registerationSuccess, setRegistrationSuccess] = useState(false);
+   const [registeredUser, setRegisteredUser] = useState<User>();
 
    const {
       handleSubmit,
@@ -38,6 +41,7 @@ export function SignupPage() {
 
          if (response.data.success) {
             toast.success("Registration successful!");
+            setRegisteredUser(response.data.data?.user);
             setTimeout(() => {
                setRegistrationSuccess(true);
             }, 1500);
@@ -52,114 +56,90 @@ export function SignupPage() {
    };
 
    if (registerationSuccess) {
-      return <Navigate to="/verify-email" replace />;
+      return <Navigate to={`/verify-email/${registeredUser?.username}`} />;
    }
 
    return (
-      <div className="flex flex-col items-center justify-center w-full min-h-screen">
-         <div className="p-4 md:p-8">
-            <h2 className="font-bold text-center text-3xl text-neutral-800 dark:text-neutral-200">
-               Sign up to dive into the world of magic
-            </h2>
-            <form className="my-12" onSubmit={handleSubmit(registerUser)}>
-               <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
-                  <LabelInputContainer>
-                     <Label htmlFor="fullName">Full Name</Label>
-                     <Controller
-                        name="fullName"
-                        control={control}
-                        render={({ field }) => (
-                           <Input
-                              id="fullName"
-                              placeholder="Max Mustermann"
-                              type="text"
-                              {...field}
-                           />
-                        )}
-                     />
-                     {formErrors.fullName && (
-                        <ErrorMessage>{formErrors.fullName.message}</ErrorMessage>
-                     )}
-                  </LabelInputContainer>
-                  <LabelInputContainer>
-                     <Label htmlFor="username">Username</Label>
-                     <Controller
-                        name="username"
-                        control={control}
-                        render={({ field }) => (
-                           <Input
-                              id="username"
-                              placeholder="max55"
-                              type="text"
-                              {...field}
-                           />
-                        )}
-                     />
-                     {formErrors.username && (
-                        <ErrorMessage>{formErrors.username.message}</ErrorMessage>
-                     )}
-                  </LabelInputContainer>
-               </div>
-               <LabelInputContainer className="mb-4">
-                  <Label htmlFor="email">Email Address</Label>
-
+      <Container>
+         <h2 className="font-bold text-center text-2xl sm:text-3xl text-neutral-800 dark:text-neutral-200 my-12">
+            Sign up to dive into the world of magic
+         </h2>
+         <form className="w-[550px] max-w-full" onSubmit={handleSubmit(registerUser)}>
+            <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
+               <LabelInputContainer>
+                  <Label htmlFor="fullName">Full Name</Label>
                   <Controller
-                     name="email"
+                     name="fullName"
                      control={control}
                      render={({ field }) => (
                         <Input
-                           id="email"
-                           placeholder="max-mustermann@google.com"
-                           type="email"
+                           id="fullName"
+                           placeholder="Max Mustermann"
+                           type="text"
                            {...field}
                         />
                      )}
                   />
-                  {formErrors.email && (
-                     <ErrorMessage>{formErrors.email.message}</ErrorMessage>
+                  {formErrors.fullName && (
+                     <InputErrorMessage>{formErrors.fullName.message}</InputErrorMessage>
                   )}
                </LabelInputContainer>
-               <LabelInputContainer className="mb-6">
-                  <Label htmlFor="password">Password</Label>
+               <LabelInputContainer>
+                  <Label htmlFor="username">Username</Label>
                   <Controller
-                     name="password"
+                     name="username"
                      control={control}
                      render={({ field }) => (
-                        <Input
-                           id="password"
-                           placeholder="••••••••"
-                           type="password"
-                           {...field}
-                        />
+                        <Input id="username" placeholder="max55" type="text" {...field} />
                      )}
                   />
-                  {formErrors.password && (
-                     <ErrorMessage>{formErrors.password.message}</ErrorMessage>
+                  {formErrors.username && (
+                     <InputErrorMessage>{formErrors.username.message}</InputErrorMessage>
                   )}
                </LabelInputContainer>
-               <Button variant="filled" type="submit" disabled={isSubmitting}>
-                  Sign up &rarr;
-               </Button>
-               {isSubmitting && <LoaderIcon className="size-7 mx-auto mt-6" />}
-               <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
-            </form>
-         </div>
-      </div>
+            </div>
+            <LabelInputContainer className="mb-4">
+               <Label htmlFor="email">Email Address</Label>
+               <Controller
+                  name="email"
+                  control={control}
+                  render={({ field }) => (
+                     <Input
+                        id="email"
+                        placeholder="max-mustermann@google.com"
+                        type="email"
+                        {...field}
+                     />
+                  )}
+               />
+               {formErrors.email && (
+                  <InputErrorMessage>{formErrors.email.message}</InputErrorMessage>
+               )}
+            </LabelInputContainer>
+            <LabelInputContainer className="mb-6">
+               <Label htmlFor="password">Password</Label>
+               <Controller
+                  name="password"
+                  control={control}
+                  render={({ field }) => (
+                     <Input
+                        id="password"
+                        placeholder="••••••••"
+                        type="password"
+                        {...field}
+                     />
+                  )}
+               />
+               {formErrors.password && (
+                  <InputErrorMessage>{formErrors.password.message}</InputErrorMessage>
+               )}
+            </LabelInputContainer>
+            <Button variant="filled" type="submit" disabled={isSubmitting}>
+               Sign up &rarr;
+            </Button>
+            {isSubmitting && <LoaderIcon className="size-7 mx-auto mt-6" />}
+            <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
+         </form>
+      </Container>
    );
 }
-
-const LabelInputContainer = ({
-   children,
-   className,
-}: {
-   children: React.ReactNode;
-   className?: string;
-}) => {
-   return (
-      <div className={cn("flex flex-col space-y-2 w-full", className)}>{children}</div>
-   );
-};
-
-const ErrorMessage = ({ children }: { children: React.ReactNode }) => {
-   return <p className="text-sm text-red-600">{children}</p>;
-};

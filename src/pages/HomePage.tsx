@@ -1,13 +1,12 @@
 import Button from "@/components/custom/Button";
-import Navbar from "@/components/custom/Navbar";
+import Container from "@/components/custom/Container";
 import { TypewriterEffectSmooth as Typewriter } from "@/components/ui/typewriter-effect";
 import { words } from "@/lib/constants";
 import { Link } from "react-router-dom";
 
 export function HomePage() {
    return (
-      <div className="flex flex-col text-center items-center justify-center w-full min-h-screen">
-         <Navbar className="font-semibold" />
+      <Container className="text-center">
          <Typewriter words={words} />
          <p className="text-neutral-600 dark:text-neutral-200 text-base mb-10 xl:text-xl">
             An application built for practice by Charanjeet Singh Roshan
@@ -20,6 +19,6 @@ export function HomePage() {
                <Button variant="outlined">Login</Button>
             </Link>
          </div>
-      </div>
+      </Container>
    );
 }
