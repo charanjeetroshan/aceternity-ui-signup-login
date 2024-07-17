@@ -7,7 +7,21 @@ export type SignupUser = {
 
 export type APIResponse = {
    statusCode: number;
-   data?: Record<string, unknown>;
+   data?: {
+      user: User;
+   };
    message: string;
    success: boolean;
+};
+
+export type User = {
+   username: string;
+   email: string;
+   password: string;
+   fullName: string;
+   verificationCode: string;
+   verificationCodeExpiration: Date;
+   isVerified: boolean;
+   resetPasswordToken: string | null;
+   resetPasswordTokenExpiration: Date | null;
 };
