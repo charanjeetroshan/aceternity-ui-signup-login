@@ -20,7 +20,7 @@ function App() {
                <Route path="/user-profile" element={<UserProfile />} />
             </Routes>
          </Router>
-         <Toaster position="bottom-center" />
+         <Toaster position="bottom-center" containerClassName="text-center" />
       </div>
    );
 }

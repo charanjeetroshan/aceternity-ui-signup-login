@@ -1,9 +1,12 @@
 import React from "react";
 import { cn } from "@/lib/utils";
-import { SlotProps, OTPInput as OTPInputComponent } from "input-otp";
+import { SlotProps, OTPInput as OTPInputComponent, OTPInputProps } from "input-otp";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const OTPInput = React.forwardRef(function OTPInput(props, _ref) {
+const OTPInput = React.forwardRef(function (
+   props: Omit<OTPInputProps, "maxLength" | "children">,
+   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   _ref
+) {
    return (
       <OTPInputComponent
          maxLength={6}

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Button from "@/components/custom/Button";
@@ -8,15 +7,14 @@ import { z } from "zod";
 import { signupSchema } from "@/schemas/signupSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
-import { APIResponse, User } from "@/types";
-import { Navigate } from "react-router-dom";
+import { APIResponse } from "@/types";
+import { useNavigate } from "react-router-dom";
 import Container from "@/components/custom/Container";
 import InputErrorMessage from "@/components/custom/InputErrorMessage";
 import { LabelInputContainer } from "@/components/custom/InputLabelContainer";
 
 export default function SignupPage() {
-   const [registerationSuccess, setRegistrationSuccess] = useState(false);
-   const [registeredUser, setRegisteredUser] = useState<User>();
+   const navigate = useNavigate();
 
    const {
       handleSubmit,
@@ -40,10 +38,9 @@ export default function SignupPage() {
          );
 
          if (response.data.success) {
-            toast.success("Registration successful!");
-            setRegisteredUser(response.data.data?.user);
+            toast.success(response.data.message);
             setTimeout(() => {
-               setRegistrationSuccess(true);
+               navigate(`/verify-email/${response.data.data?.user.username}`);
             }, 1500);
          }
       } catch (error) {
@@ -54,10 +51,6 @@ export default function SignupPage() {
          }
       }
    };
-
-   if (registerationSuccess) {
-      return <Navigate to={`/verify-email/${registeredUser?.username}`} />;
-   }
 
    return (
       <Container>
