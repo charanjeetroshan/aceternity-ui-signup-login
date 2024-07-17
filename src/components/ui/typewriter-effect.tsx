@@ -40,7 +40,7 @@ export const TypewriterEffect = ({
             }
          );
       }
-   }, [isInView]);
+   }, [animate, isInView]);
 
    const renderWords = () => {
       return (
@@ -53,7 +53,7 @@ export const TypewriterEffect = ({
                            initial={{}}
                            key={`char-${index}`}
                            className={cn(
-                              `dark:text-white text-black opacity-0 hidden`,
+                              "dark:text-white text-black opacity-0 hidden",
                               word.className
                            )}
                         >
@@ -124,7 +124,7 @@ export const TypewriterEffectSmooth = ({
                      {word.text.map((char, index) => (
                         <span
                            key={`char-${index}`}
-                           className={cn(`dark:text-white text-black `, word.className)}
+                           className={cn("dark:text-white text-black ", word.className)}
                         >
                            {char}
                         </span>
