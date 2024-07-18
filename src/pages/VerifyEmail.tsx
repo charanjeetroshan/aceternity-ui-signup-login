@@ -10,6 +10,7 @@ import OTPInput from "@/components/custom/OTPInput";
 import Container from "@/components/custom/Container";
 import InputErrorMessage from "@/components/custom/InputErrorMessage";
 import { useCallback, useEffect, useState } from "react";
+import GradientSeparator from "@/components/custom/GradientSeparator";
 
 type VerificationProcess = {
    verificationMessage: string;
@@ -53,7 +54,7 @@ export default function VerifyEmail() {
                }, 1500);
             }
          } catch (error) {
-            console.log(error);
+            console.error(error);
             const errors = error as AxiosError<APIResponse>;
             if (errors.response) {
                toast.error(errors.response.data.message);
@@ -61,6 +62,8 @@ export default function VerifyEmail() {
                   verificationMessage: errors.response.data.message,
                   verificationSuccessful: false,
                });
+            } else {
+               toast.error(errors.message);
             }
          }
       },
@@ -110,10 +113,7 @@ export default function VerifyEmail() {
          </p>
 
          {isSubmitting && <LoaderIcon className="size-7 mx-auto mt-6" />}
-         <div
-            className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700
-               to-transparent my-8 h-[1px] w-full"
-         />
+         <GradientSeparator />
       </Container>
    );
 }

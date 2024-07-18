@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import Container from "@/components/custom/Container";
 import InputErrorMessage from "@/components/custom/InputErrorMessage";
 import { LabelInputContainer } from "@/components/custom/InputLabelContainer";
+import GradientSeparator from "@/components/custom/GradientSeparator";
 
 export default function SignupPage() {
    const navigate = useNavigate();
@@ -44,10 +45,12 @@ export default function SignupPage() {
             }, 1500);
          }
       } catch (error) {
-         console.log(error);
+         console.error(error);
          const errors = error as AxiosError<APIResponse>;
          if (errors.response) {
             toast.error(errors.response.data.message);
+         } else {
+            toast.error(errors.message);
          }
       }
    };
@@ -131,8 +134,8 @@ export default function SignupPage() {
                Sign up &rarr;
             </Button>
             {isSubmitting && <LoaderIcon className="size-7 mx-auto mt-6" />}
-            <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
          </form>
+         <GradientSeparator />
       </Container>
    );
 }

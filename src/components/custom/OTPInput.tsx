@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { SlotProps, OTPInput as OTPInputComponent, OTPInputProps } from "input-otp";
 
 const OTPInput = React.forwardRef(function (
-   props: Omit<OTPInputProps, "maxLength" | "children">,
+   props: Omit<OTPInputProps, "maxLength" | "children" | "render">,
    // eslint-disable-next-line @typescript-eslint/no-unused-vars
    _ref
 ) {
