@@ -4,7 +4,6 @@ import Button from "@/components/custom/Button";
 import toast, { LoaderIcon } from "react-hot-toast";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
-import { signupSchema } from "@/schemas/signupSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
 import { APIResponse } from "@/types";
@@ -13,35 +12,43 @@ import Container from "@/components/custom/Container";
 import InputErrorMessage from "@/components/custom/InputErrorMessage";
 import { LabelInputContainer } from "@/components/custom/InputLabelContainer";
 import GradientSeparator from "@/components/custom/GradientSeparator";
+import { emailValidationRegExp, signInSchema } from "@/schemas/signinSchema";
 
-export default function SignUpPage() {
+export default function SignInPage() {
    const navigate = useNavigate();
 
    const {
       handleSubmit,
       control,
       formState: { isSubmitting, errors: formErrors },
-   } = useForm<z.infer<typeof signupSchema>>({
-      resolver: zodResolver(signupSchema),
+   } = useForm<z.infer<typeof signInSchema>>({
+      resolver: zodResolver(signInSchema),
       defaultValues: {
-         fullName: "",
-         email: "",
-         username: "",
+         credentials: "",
          password: "",
       },
    });
 
-   const registerUser = async (data: z.infer<typeof signupSchema>) => {
+   const signInUser = async (data: z.infer<typeof signInSchema>) => {
+      const email = data.credentials.includes("@") ? data.credentials : undefined;
+      const username = !emailValidationRegExp.test(data.credentials)
+         ? data.credentials
+         : undefined;
+
       try {
          const response = await axios.post<APIResponse>(
-            "http://localhost:8000/api/v1/users/register",
-            data
+            "http://localhost:8000/api/v1/users/login",
+            {
+               email,
+               username,
+               password: data.password,
+            }
          );
 
          if (response.data.success) {
             toast.success(response.data.message);
             setTimeout(() => {
-               navigate(`/verify-email/${response.data.data?.user.username}`);
+               navigate("/user-profile");
             }, 1500);
          }
       } catch (error) {
@@ -58,60 +65,28 @@ export default function SignUpPage() {
    return (
       <Container>
          <h2 className="font-bold text-center text-2xl sm:text-3xl text-neutral-800 dark:text-neutral-200 my-12">
-            Sign up to dive into the world of magic
+            Log in to dive into the world of magic
          </h2>
-         <form className="w-[550px] max-w-full" onSubmit={handleSubmit(registerUser)}>
-            <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
-               <LabelInputContainer>
-                  <Label htmlFor="fullName">Full Name</Label>
-                  <Controller
-                     name="fullName"
-                     control={control}
-                     render={({ field }) => (
-                        <Input
-                           id="fullName"
-                           placeholder="Max Mustermann"
-                           type="text"
-                           {...field}
-                        />
-                     )}
-                  />
-                  {formErrors.fullName && (
-                     <InputErrorMessage>{formErrors.fullName.message}</InputErrorMessage>
-                  )}
-               </LabelInputContainer>
-               <LabelInputContainer>
-                  <Label htmlFor="username">Username</Label>
-                  <Controller
-                     name="username"
-                     control={control}
-                     render={({ field }) => (
-                        <Input id="username" placeholder="max55" type="text" {...field} />
-                     )}
-                  />
-                  {formErrors.username && (
-                     <InputErrorMessage>{formErrors.username.message}</InputErrorMessage>
-                  )}
-               </LabelInputContainer>
-            </div>
-            <LabelInputContainer className="mb-4">
-               <Label htmlFor="email">Email Address</Label>
+         <form className="w-[550px] max-w-full" onSubmit={handleSubmit(signInUser)}>
+            <LabelInputContainer className="mb-6">
+               <Label htmlFor="credentials">Email / Username</Label>
                <Controller
-                  name="email"
+                  name="credentials"
                   control={control}
                   render={({ field }) => (
                      <Input
-                        id="email"
-                        placeholder="max-mustermann@google.com"
-                        type="email"
+                        id="credentials"
+                        placeholder="Max Mustermann"
+                        type="text"
                         {...field}
                      />
                   )}
                />
-               {formErrors.email && (
-                  <InputErrorMessage>{formErrors.email.message}</InputErrorMessage>
+               {formErrors.credentials && (
+                  <InputErrorMessage>{formErrors.credentials.message}</InputErrorMessage>
                )}
             </LabelInputContainer>
+
             <LabelInputContainer className="mb-6">
                <Label htmlFor="password">Password</Label>
                <Controller
@@ -131,7 +106,7 @@ export default function SignUpPage() {
                )}
             </LabelInputContainer>
             <Button variant="filled" type="submit" disabled={isSubmitting}>
-               Sign up &rarr;
+               Login &rarr;
             </Button>
             {isSubmitting && <LoaderIcon className="size-7 mx-auto mt-6" />}
          </form>

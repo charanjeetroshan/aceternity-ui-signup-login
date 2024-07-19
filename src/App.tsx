@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { HomePage } from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
+import SignInPage from "./pages/SignInPage";
+import SignUpPage from "./pages/SignUpPage";
 import UserProfile from "./pages/UserProfile";
 import { Toaster } from "react-hot-toast";
 import VerifyEmail from "./pages/VerifyEmail";
@@ -14,9 +14,9 @@ function App() {
             <Navbar className="font-semibold" />
             <Routes>
                <Route path="/" element={<HomePage />} />
-               <Route path="/sign-up" element={<SignupPage />} />
+               <Route path="/sign-up" element={<SignUpPage />} />
                <Route path="/verify-email/:username" element={<VerifyEmail />} />
-               <Route path="/sign-in" element={<LoginPage />} />
+               <Route path="/sign-in" element={<SignInPage />} />
                <Route path="/user-profile" element={<UserProfile />} />
             </Routes>
          </Router>
