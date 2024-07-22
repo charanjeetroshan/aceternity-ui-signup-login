@@ -1,19 +1,3 @@
-export type SignupUser = {
-   fullName: string;
-   username: string;
-   email: string;
-   password: string;
-};
-
-export type APIResponse = {
-   statusCode: number;
-   data?: {
-      user: User;
-   };
-   message: string;
-   success: boolean;
-};
-
 export type User = {
    username: string;
    email: string;
@@ -25,3 +9,20 @@ export type User = {
    resetPasswordToken: string | null;
    resetPasswordTokenExpiration: Date | null;
 };
+
+export type SignUpUser = Pick<User, "fullName" | "username" | "email" | "password">;
+
+export type SignInUser = {
+   password: string;
+} & ({ username?: string } | { email?: string });
+
+export type APIResponse = {
+   statusCode: number;
+   data?: {
+      user: User;
+   };
+   message: string;
+   success: boolean;
+};
+
+export type DisplayUser = Pick<User, "fullName" | "username" | "email" | "isVerified">;
