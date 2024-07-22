@@ -1,7 +1,7 @@
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Button from "@/components/custom/Button";
-import toast, { LoaderIcon } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { signupSchema } from "@/schemas/signupSchema";
@@ -13,10 +13,10 @@ import Container from "@/components/custom/Container";
 import InputErrorMessage from "@/components/custom/InputErrorMessage";
 import { LabelInputContainer } from "@/components/custom/InputLabelContainer";
 import GradientSeparator from "@/components/custom/GradientSeparator";
+import Loader from "@/components/custom/Loader";
 
 export default function SignUpPage() {
    const navigate = useNavigate();
-
    const {
       handleSubmit,
       control,
@@ -133,7 +133,7 @@ export default function SignUpPage() {
             <Button variant="filled" type="submit" disabled={isSubmitting}>
                Sign up &rarr;
             </Button>
-            {isSubmitting && <LoaderIcon className="size-7 mx-auto mt-6" />}
+            {isSubmitting && <Loader className="mx-auto mt-6" size="small" />}
          </form>
          <GradientSeparator />
       </Container>

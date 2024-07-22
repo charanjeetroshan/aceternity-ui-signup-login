@@ -4,17 +4,15 @@ type ButtonProps = React.ComponentPropsWithoutRef<"button"> & {
 };
 
 export default function Button(props: ButtonProps) {
-   const { variant, children, ...rest } = props;
+   const { variant, children, className, ...rest } = props;
 
-   const baseClasses =
-      "w-full py-2 px-12 font-semibold rounded-md text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-60";
+   const baseClasses = `py-2 px-12 font-semibold rounded-md text-sm transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${className}`;
 
    if (variant === "filled") {
       return (
          <button
             className={`${baseClasses} bg-blue-600 border border-transparent text-neutral-200 hover:bg-blue-700`}
-            {...rest}
-         >
+            {...rest}>
             {children}
          </button>
       );
@@ -24,8 +22,7 @@ export default function Button(props: ButtonProps) {
       return (
          <button
             className={`${baseClasses} text-neutral-200 border border-blue-600 hover:border-blue-700`}
-            {...rest}
-         >
+            {...rest}>
             {children}
          </button>
       );

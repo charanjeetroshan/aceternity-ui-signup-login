@@ -4,7 +4,7 @@ import { TypewriterEffectSmooth as Typewriter } from "@/components/ui/typewriter
 import { words } from "@/lib/constants";
 import { Link } from "react-router-dom";
 
-export function HomePage() {
+export default function HomePage() {
    return (
       <Container className="text-center">
          <Typewriter words={words} />

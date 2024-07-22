@@ -13,6 +13,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       const mouseX = useMotionValue(0);
       const mouseY = useMotionValue(0);
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       function handleMouseMove({ currentTarget, clientX, clientY }: any) {
          const { left, top } = currentTarget.getBoundingClientRect();
 
@@ -33,8 +34,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             onMouseMove={handleMouseMove}
             onMouseEnter={() => setVisible(true)}
             onMouseLeave={() => setVisible(false)}
-            className="p-[2px] rounded-lg transition duration-300 group/input"
-         >
+            className="p-[2px] rounded-lg transition duration-300 group/input">
             <input
                type={type}
                className={cn(

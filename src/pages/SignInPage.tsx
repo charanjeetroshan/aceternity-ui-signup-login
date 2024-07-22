@@ -1,22 +1,23 @@
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Button from "@/components/custom/Button";
-import toast, { LoaderIcon } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import axios, { AxiosError } from "axios";
-import { APIResponse } from "@/types";
-import { useNavigate } from "react-router-dom";
 import Container from "@/components/custom/Container";
 import InputErrorMessage from "@/components/custom/InputErrorMessage";
 import { LabelInputContainer } from "@/components/custom/InputLabelContainer";
 import GradientSeparator from "@/components/custom/GradientSeparator";
 import { emailValidationRegExp, signInSchema } from "@/schemas/signinSchema";
+import { useAuth } from "@/hooks/useAuth";
+import { useSetRecoilState } from "recoil";
+import { userState } from "@/contexts/UserState";
+import Loader from "@/components/custom/Loader";
 
 export default function SignInPage() {
-   const navigate = useNavigate();
-
+   const setUser = useSetRecoilState(userState);
+   const { signInUser, getCurrentUser } = useAuth();
    const {
       handleSubmit,
       control,
@@ -29,36 +30,32 @@ export default function SignInPage() {
       },
    });
 
-   const signInUser = async (data: z.infer<typeof signInSchema>) => {
+   const submitHandler = async (data: z.infer<typeof signInSchema>) => {
       const email = data.credentials.includes("@") ? data.credentials : undefined;
       const username = !emailValidationRegExp.test(data.credentials)
          ? data.credentials
          : undefined;
 
-      try {
-         const response = await axios.post<APIResponse>(
-            "http://localhost:8000/api/v1/users/login",
-            {
-               email,
-               username,
-               password: data.password,
-            }
-         );
+      const { response, errors } = await signInUser({
+         email,
+         username,
+         password: data.password,
+      });
 
-         if (response.data.success) {
-            toast.success(response.data.message);
-            setTimeout(() => {
-               navigate("/user-profile");
-            }, 1500);
+      if (response && response.data.success) {
+         toast.success(response.data.message);
+
+         const { response: currentUserResponse } = await getCurrentUser();
+
+         if (currentUserResponse && currentUserResponse.data.success) {
+            setUser(currentUserResponse.data.data?.user);
          }
-      } catch (error) {
-         console.error(error);
-         const errors = error as AxiosError<APIResponse>;
-         if (errors.response) {
-            toast.error(errors.response.data.message);
-         } else {
-            toast.error(errors.message);
-         }
+      }
+
+      if (errors && errors.response) {
+         toast.error(errors.response.data.message);
+      } else if (errors) {
+         toast.error(errors.message);
       }
    };
 
@@ -67,7 +64,7 @@ export default function SignInPage() {
          <h2 className="font-bold text-center text-2xl sm:text-3xl text-neutral-800 dark:text-neutral-200 my-12">
             Log in to dive into the world of magic
          </h2>
-         <form className="w-[550px] max-w-full" onSubmit={handleSubmit(signInUser)}>
+         <form className="w-[550px] max-w-full" onSubmit={handleSubmit(submitHandler)}>
             <LabelInputContainer className="mb-6">
                <Label htmlFor="credentials">Email / Username</Label>
                <Controller
@@ -108,7 +105,7 @@ export default function SignInPage() {
             <Button variant="filled" type="submit" disabled={isSubmitting}>
                Login &rarr;
             </Button>
-            {isSubmitting && <LoaderIcon className="size-7 mx-auto mt-6" />}
+            {isSubmitting && <Loader className="mx-auto mt-6" size="small" />}
          </form>
          <GradientSeparator />
       </Container>

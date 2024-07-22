@@ -1,4 +1,4 @@
-import toast, { LoaderIcon } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,6 +11,7 @@ import Container from "@/components/custom/Container";
 import InputErrorMessage from "@/components/custom/InputErrorMessage";
 import { useCallback, useEffect, useState } from "react";
 import GradientSeparator from "@/components/custom/GradientSeparator";
+import Loader from "@/components/custom/Loader";
 
 type VerificationProcess = {
    verificationMessage: string;
@@ -107,12 +108,11 @@ export default function VerifyEmail() {
                verificationProcess?.verificationSuccessful
                   ? "text-green-600"
                   : "text-red-600"
-            }`}
-         >
+            }`}>
             {verificationProcess?.verificationMessage}
          </p>
 
-         {isSubmitting && <LoaderIcon className="size-7 mx-auto mt-6" />}
+         {isSubmitting && <Loader className="size-7 mx-auto mt-6" size="small" />}
          <GradientSeparator />
       </Container>
    );
