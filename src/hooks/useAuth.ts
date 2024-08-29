@@ -1,4 +1,4 @@
-import { APIResponse, SignInUser } from "@/types";
+import { APIResponse, DeleteUserAccount, SignInUser } from "@/types";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useCallback, useState } from "react";
 
@@ -66,10 +66,31 @@ export function useAuth() {
       return { response, errors };
    }, []);
 
+   const deleteUserAccount = useCallback(async (user: DeleteUserAccount) => {
+      setIsLoading(true);
+
+      let response: AxiosResponse<APIResponse> | undefined;
+      let errors: AxiosError<APIResponse> | undefined;
+
+      try {
+         response = await axios.post<APIResponse>(`${baseAPIURL}/delete-account`, user, {
+            withCredentials: true,
+         });
+      } catch (error) {
+         console.error(error);
+         errors = error as AxiosError<APIResponse>;
+      } finally {
+         setIsLoading(false);
+      }
+
+      return { response, errors };
+   }, []);
+
    return {
       isLoading,
       signInUser,
       getCurrentUser,
-      logoutUser: signOutUser,
+      signOutUser,
+      deleteUserAccount,
    };
 }

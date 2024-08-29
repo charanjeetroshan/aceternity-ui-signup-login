@@ -9,6 +9,7 @@ import { usePreviousLocation } from "./hooks/usePreviousLocation";
 import { SpecialRoutes } from "./components/custom/SpecialRoutes";
 import Loader from "./components/custom/Loader";
 import Container from "./components/custom/Container";
+import DeleteAccountPage from "./pages/DeleteAccountPage";
 
 const HomePage = lazy(() => import("@/pages/HomePage"));
 const SignInPage = lazy(() => import("@/pages/SignInPage"));
@@ -17,7 +18,7 @@ const UserProfile = lazy(() => import("@/pages/UserProfile"));
 const VerifyEmail = lazy(() => import("@/pages/VerifyEmail"));
 
 function App() {
-   const { getCurrentUser } = useAuth();
+   const { getCurrentUser, isLoading } = useAuth();
    const previousLocation = usePreviousLocation();
    const location = useLocation();
    const [user, setUser] = useRecoilState(userState);
@@ -47,7 +48,8 @@ function App() {
    useEffect(() => {
       if (
          !user &&
-         location.pathname.endsWith("/user-profile") &&
+         (location.pathname.endsWith("/user-profile") ||
+            location.pathname.endsWith("/delete-account")) &&
          (previousLocation.endsWith("/") ||
             previousLocation.endsWith("/sign-in") ||
             previousLocation.endsWith("/sign-up"))
@@ -55,6 +57,14 @@ function App() {
          toast.error("You need to sign in first.", { duration: 1500 });
       }
    }, [location.pathname, previousLocation, user]);
+
+   if (isLoading) {
+      return (
+         <Container>
+            <Loader size="large" />
+         </Container>
+      );
+   }
 
    return (
       <>
@@ -75,6 +85,7 @@ function App() {
 
                <Route element={<SpecialRoutes type="PRIVATE" />}>
                   <Route path="/user-profile" element={<UserProfile />} />
+                  <Route path="/delete-account" element={<DeleteAccountPage />} />
                </Route>
             </Routes>
             <Toaster position="bottom-center" containerClassName="text-center" />

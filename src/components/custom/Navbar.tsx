@@ -16,8 +16,7 @@ export default function Navbar({ className }: { className?: string }) {
                   <HoveredLink
                      to="/"
                      className="hover:dark:text-neutral-200 hover:opacity-[0.9]"
-                     setActive={setActive}
-                  >
+                     setActive={setActive}>
                      Home
                   </HoveredLink>
 
@@ -31,7 +30,7 @@ export default function Navbar({ className }: { className?: string }) {
                   <MenuItem setActive={setActive} active={active} item="Pricing">
                      <div className="flex flex-col space-y-4 text-sm">
                         <HoveredLink to="/user-profile">My profile</HoveredLink>
-                        <HoveredLink to="#">Individual</HoveredLink>
+                        <HoveredLink to="/delete-account">Delete my account</HoveredLink>
                         <HoveredLink to="#">Team</HoveredLink>
                         <HoveredLink to="#">Enterprise</HoveredLink>
                      </div>

@@ -26,3 +26,5 @@ export type APIResponse = {
 };
 
 export type DisplayUser = Pick<User, "fullName" | "username" | "email" | "isVerified">;
+
+export type DeleteUserAccount = Pick<User, "password">;
