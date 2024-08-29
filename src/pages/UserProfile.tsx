@@ -17,13 +17,13 @@ import Loader from "@/components/custom/Loader";
 
 function UserProfile() {
    const [user, setUser] = useRecoilState(userState);
-   const { isLoading, getCurrentUser, logoutUser } = useAuth();
+   const { isLoading, getCurrentUser, signOutUser } = useAuth();
    const displayUser: DisplayUser | undefined = user;
 
    usePageVisibility(getCurrentUser);
 
    const handleClick = async () => {
-      const { response, errors } = await logoutUser();
+      const { response, errors } = await signOutUser();
 
       if (response && response.data.success) {
          toast.success(response.data.message);
