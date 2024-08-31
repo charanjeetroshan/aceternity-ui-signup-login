@@ -4,6 +4,8 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Container from "./Container";
 import Loader from "./Loader";
+import { DisplayUser } from "@/types";
+import { usePreviousLocation } from "@/hooks/usePreviousLocation";
 
 type SpecialRoutesProps = {
    type: "PRIVATE" | "PUBLIC";
@@ -13,6 +15,7 @@ export function SpecialRoutes(props: SpecialRoutesProps) {
    const { type } = props;
    const isUserLoadable = useRecoilValueLoadable(userState);
    const [isLoading, setIsLoading] = useState(true);
+   const previousLocation = usePreviousLocation();
 
    useEffect(() => {
       if (isUserLoadable.state !== "loading") {
@@ -20,7 +23,7 @@ export function SpecialRoutes(props: SpecialRoutesProps) {
       }
    }, [isUserLoadable.state]);
 
-   const user = isUserLoadable.contents;
+   const user: DisplayUser | undefined = isUserLoadable.contents;
 
    if (isLoading) {
       return (
@@ -31,6 +34,10 @@ export function SpecialRoutes(props: SpecialRoutesProps) {
    }
 
    if (type === "PRIVATE") {
+      if (!user && previousLocation.endsWith("/delete-account")) {
+         return <Navigate to="/" />;
+      }
+
       return user ? <Outlet /> : <Navigate to="sign-in" />;
    }
 

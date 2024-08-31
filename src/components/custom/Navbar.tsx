@@ -2,9 +2,31 @@ import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Menu, MenuItem, HoveredLink } from "../ui/navbar-menu";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { useSetRecoilState } from "recoil";
+import { userState } from "@/contexts/UserState";
+import toast from "react-hot-toast";
 
 export default function Navbar({ className }: { className?: string }) {
    const [active, setActive] = useState<string | null>(null);
+   const { signOutUser } = useAuth();
+   const setUser = useSetRecoilState(userState);
+
+   const handleClick = async () => {
+      const { response, errors } = await signOutUser();
+
+      if (response && response.data.success) {
+         toast.success(response.data.message);
+         setUser(undefined);
+      }
+
+      if (errors && errors.response) {
+         toast.error(errors.response.data.message);
+      } else if (errors) {
+         toast.error(errors.message);
+      }
+   };
+
    return (
       <div className={cn("fixed inset-x-0 w-full mx-auto z-50", className)}>
          <Menu setActive={setActive}>
@@ -31,8 +53,9 @@ export default function Navbar({ className }: { className?: string }) {
                      <div className="flex flex-col space-y-4 text-sm">
                         <HoveredLink to="/user-profile">My profile</HoveredLink>
                         <HoveredLink to="/delete-account">Delete my account</HoveredLink>
-                        <HoveredLink to="#">Team</HoveredLink>
-                        <HoveredLink to="#">Enterprise</HoveredLink>
+                        <HoveredLink to="#" onClick={handleClick}>
+                           Logout
+                        </HoveredLink>
                      </div>
                   </MenuItem>
                </div>
