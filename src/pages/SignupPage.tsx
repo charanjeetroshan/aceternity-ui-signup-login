@@ -4,7 +4,7 @@ import Button from "@/components/custom/Button";
 import toast from "react-hot-toast";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
-import { signupSchema } from "@/schemas/signupSchema";
+import { signupSchema } from "@/schemas/signUpSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
 import { APIResponse } from "@/types";

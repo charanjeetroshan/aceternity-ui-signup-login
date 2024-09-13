@@ -3,16 +3,20 @@ import { useState } from "react";
 import { Menu, MenuItem, HoveredLink } from "../ui/navbar-menu";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { userState } from "@/contexts/UserState";
 import toast from "react-hot-toast";
 
 export default function Navbar({ className }: { className?: string }) {
    const [active, setActive] = useState<string | null>(null);
    const { signOutUser } = useAuth();
-   const setUser = useSetRecoilState(userState);
+   const [user, setUser] = useRecoilState(userState);
 
    const handleClick = async () => {
+      if (!user) {
+         return;
+      }
+
       const { response, errors } = await signOutUser();
 
       if (response && response.data.success) {
@@ -53,9 +57,11 @@ export default function Navbar({ className }: { className?: string }) {
                      <div className="flex flex-col space-y-4 text-sm">
                         <HoveredLink to="/user-profile">My profile</HoveredLink>
                         <HoveredLink to="/delete-account">Delete my account</HoveredLink>
-                        <HoveredLink to="#" onClick={handleClick}>
-                           Logout
-                        </HoveredLink>
+                        {user && (
+                           <HoveredLink to="/" onClick={handleClick}>
+                              Logout
+                           </HoveredLink>
+                        )}
                      </div>
                   </MenuItem>
                </div>

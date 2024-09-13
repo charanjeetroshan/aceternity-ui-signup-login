@@ -1,4 +1,10 @@
-import { APIResponse, DeleteUserAccount, SignInUser } from "@/types";
+import {
+   APIResponse,
+   DeleteUserAccount,
+   ForgotPasswordUser,
+   ResetPasswordUser,
+   SignInUser,
+} from "@/types";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useCallback, useState } from "react";
 
@@ -86,11 +92,52 @@ export function useAuth() {
       return { response, errors };
    }, []);
 
+   const forgotPassword = useCallback(async (user: ForgotPasswordUser) => {
+      setIsLoading(true);
+
+      let response: AxiosResponse<APIResponse> | undefined;
+      let errors: AxiosError<APIResponse> | undefined;
+
+      try {
+         response = await axios.post<APIResponse>(
+            `${baseAPIURL}/reset-password-otp`,
+            user
+         );
+      } catch (error) {
+         console.error(error);
+         errors = error as AxiosError<APIResponse>;
+      } finally {
+         setIsLoading(false);
+      }
+
+      return { response, errors };
+   }, []);
+
+   const resetPassword = useCallback(async (user: ResetPasswordUser) => {
+      setIsLoading(true);
+
+      let response: AxiosResponse<APIResponse> | undefined;
+      let errors: AxiosError<APIResponse> | undefined;
+
+      try {
+         response = await axios.post<APIResponse>(`${baseAPIURL}/reset-password`, user);
+      } catch (error) {
+         console.error(error);
+         errors = error as AxiosError<APIResponse>;
+      } finally {
+         setIsLoading(false);
+      }
+
+      return { response, errors };
+   }, []);
+
    return {
       isLoading,
       signInUser,
       getCurrentUser,
       signOutUser,
       deleteUserAccount,
+      forgotPassword,
+      resetPassword,
    };
 }

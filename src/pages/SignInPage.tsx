@@ -9,11 +9,12 @@ import Container from "@/components/custom/Container";
 import InputErrorMessage from "@/components/custom/InputErrorMessage";
 import { LabelInputContainer } from "@/components/custom/InputLabelContainer";
 import GradientSeparator from "@/components/custom/GradientSeparator";
-import { emailValidationRegExp, signInSchema } from "@/schemas/signinSchema";
+import { emailValidationRegExp, signInSchema } from "@/schemas/signInSchema";
 import { useAuth } from "@/hooks/useAuth";
 import { useSetRecoilState } from "recoil";
 import { userState } from "@/contexts/UserState";
 import Loader from "@/components/custom/Loader";
+import { Link } from "react-router-dom";
 
 export default function SignInPage() {
    const setUser = useSetRecoilState(userState);
@@ -84,7 +85,7 @@ export default function SignInPage() {
                )}
             </LabelInputContainer>
 
-            <LabelInputContainer className="mb-6">
+            <LabelInputContainer>
                <Label htmlFor="password">Password</Label>
                <Controller
                   name="password"
@@ -102,6 +103,17 @@ export default function SignInPage() {
                   <InputErrorMessage>{formErrors.password.message}</InputErrorMessage>
                )}
             </LabelInputContainer>
+            <div className="mb-6">
+               <span className="text-sm text-neutral-500">
+                  Forgot your password? Click{" "}
+               </span>
+               <Link
+                  className="text-sm text-blue-600 hover:underline hover:text-blue-700"
+                  to="/forgot-password">
+                  here
+               </Link>
+               <span className="text-sm text-neutral-500"> to reset it.</span>
+            </div>
             <Button variant="filled" type="submit" disabled={isSubmitting}>
                Login &rarr;
             </Button>

@@ -28,3 +28,10 @@ export type APIResponse = {
 export type DisplayUser = Pick<User, "fullName" | "username" | "email" | "isVerified">;
 
 export type DeleteUserAccount = Pick<User, "password">;
+
+export type ForgotPasswordUser = Pick<User, "email">;
+export type ResetPasswordUser = Pick<User, "username"> & {
+   resetPasswordOTP: string;
+   newPassword: string;
+   confirmNewPassword: string;
+};

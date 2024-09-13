@@ -10,6 +10,8 @@ import { SpecialRoutes } from "./components/custom/SpecialRoutes";
 import Loader from "./components/custom/Loader";
 import Container from "./components/custom/Container";
 import DeleteAccountPage from "./pages/DeleteAccountPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPassword from "./pages/ResetPassword";
 
 const HomePage = lazy(() => import("@/pages/HomePage"));
 const SignInPage = lazy(() => import("@/pages/SignInPage"));
@@ -52,7 +54,8 @@ function App() {
             location.pathname.endsWith("/delete-account")) &&
          (previousLocation.endsWith("/") ||
             previousLocation.endsWith("/sign-in") ||
-            previousLocation.endsWith("/sign-up"))
+            previousLocation.endsWith("/sign-up") ||
+            previousLocation.endsWith("/forgot-password"))
       ) {
          toast.error("You need to sign in first.", { duration: 1500 });
       }
@@ -81,6 +84,8 @@ function App() {
                   <Route path="/sign-up" element={<SignUpPage />} />
                   <Route path="/verify-email/:username" element={<VerifyEmail />} />
                   <Route path="/sign-in" element={<SignInPage />} />
+                  <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                  <Route path="/reset-password" element={<ResetPassword />} />
                </Route>
 
                <Route element={<SpecialRoutes type="PRIVATE" />}>
