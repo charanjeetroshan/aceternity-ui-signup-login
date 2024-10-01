@@ -18,7 +18,6 @@ export function showToastMessage(
 
       if (options) {
          const { isSignOut = false, setUser } = options;
-         console.log("isSignOut", isSignOut);
 
          if (isSignOut) {
             setUser(undefined);

@@ -39,8 +39,6 @@ function ResetPassword() {
       }
    };
 
-   console.log(formErrors);
-
    return (
       <Container>
          <h2 className="font-bold text-center text-2xl sm:text-3xl text-neutral-800 dark:text-neutral-200 my-12">
