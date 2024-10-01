@@ -7,34 +7,22 @@ import {
    CardDescription,
 } from "@/components/ui/card";
 import { userState } from "@/contexts/UserState";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { DisplayUser } from "@/types";
 import Button from "@/components/custom/Button";
-import toast from "react-hot-toast";
 import usePageVisibility from "@/hooks/usePageVisibility";
 import { useAuth } from "@/hooks/useAuth";
 import Loader from "@/components/custom/Loader";
 
 function UserProfile() {
-   const [user, setUser] = useRecoilState(userState);
+   const user = useRecoilValue(userState);
    const { isLoading, getCurrentUser, signOutUser } = useAuth();
    const displayUser: DisplayUser | undefined = user;
 
    usePageVisibility(getCurrentUser);
 
    const handleClick = async () => {
-      const { response, errors } = await signOutUser();
-
-      if (response && response.data.success) {
-         toast.success(response.data.message);
-         setUser(undefined);
-      }
-
-      if (errors && errors.response) {
-         toast.error(errors.response.data.message);
-      } else if (errors) {
-         toast.error(errors.message);
-      }
+      await signOutUser();
    };
 
    if (isLoading) {

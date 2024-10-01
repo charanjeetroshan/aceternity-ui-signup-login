@@ -6,14 +6,11 @@ import { LabelInputContainer } from "@/components/custom/InputLabelContainer";
 import Loader from "@/components/custom/Loader";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { userState } from "@/contexts/UserState";
 import { useAuth } from "@/hooks/useAuth";
 import { deleteAccountSchema } from "@/schemas/deleteAccountSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
-import { useSetRecoilState } from "recoil";
 import { z } from "zod";
 
 export default function DeleteAccountPage() {
@@ -29,24 +26,12 @@ export default function DeleteAccountPage() {
       },
    });
    const { deleteUserAccount } = useAuth();
-   const setUser = useSetRecoilState(userState);
 
    const openDialog = () => setIsOpen(true);
    const closeDialog = () => setIsOpen(false);
 
    const submitHandler = async (data: z.infer<typeof deleteAccountSchema>) => {
-      const { response, errors } = await deleteUserAccount(data);
-
-      if (response && response.data.success) {
-         setUser(undefined);
-         toast.success(response.data.message);
-      }
-
-      if (errors && errors.response) {
-         toast.error(errors.response.data.message);
-      } else if (errors) {
-         toast.error(errors.message);
-      }
+      await deleteUserAccount(data);
    };
 
    const handleKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {

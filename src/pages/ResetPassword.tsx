@@ -10,7 +10,6 @@ import { resetPasswordSchema } from "@/schemas/resetPasswordSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "@radix-ui/react-label";
 import { Controller, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 
@@ -33,17 +32,10 @@ function ResetPassword() {
    const { resetPassword } = useAuth();
 
    const submitHandler = async (data: z.infer<typeof resetPasswordSchema>) => {
-      const { response, errors } = await resetPassword(data);
+      const { response } = await resetPassword(data);
 
       if (response?.data.success) {
-         toast.success(response.data.message);
          navigate("/sign-in");
-      }
-
-      if (errors && errors.response) {
-         toast.error(errors.response.data.message);
-      } else if (errors) {
-         toast.error(errors.message);
       }
    };
 

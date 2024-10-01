@@ -3,7 +3,6 @@ import toast, { Toaster } from "react-hot-toast";
 import Navbar from "./components/custom/Navbar";
 import { lazy, Suspense, useEffect } from "react";
 import { useAuth } from "./hooks/useAuth";
-import { useRecoilState } from "recoil";
 import { userState } from "./contexts/UserState";
 import { usePreviousLocation } from "./hooks/usePreviousLocation";
 import { SpecialRoutes } from "./components/custom/SpecialRoutes";
@@ -12,6 +11,7 @@ import Container from "./components/custom/Container";
 import DeleteAccountPage from "./pages/DeleteAccountPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPassword from "./pages/ResetPassword";
+import { useRecoilValue } from "recoil";
 
 const HomePage = lazy(() => import("@/pages/HomePage"));
 const SignInPage = lazy(() => import("@/pages/SignInPage"));
@@ -23,17 +23,13 @@ function App() {
    const { getCurrentUser, isLoading } = useAuth();
    const previousLocation = usePreviousLocation();
    const location = useLocation();
-   const [user, setUser] = useRecoilState(userState);
+   const user = useRecoilValue(userState);
 
    useEffect(() => {
       (async () => {
-         const { response } = await getCurrentUser();
-
-         if (response && response.data.success) {
-            setUser(response.data.data?.user);
-         }
+         await getCurrentUser();
       })();
-   }, [getCurrentUser, setUser]);
+   }, [getCurrentUser]);
 
    useEffect(() => {
       if (

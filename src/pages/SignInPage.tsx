@@ -1,7 +1,6 @@
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Button from "@/components/custom/Button";
-import toast from "react-hot-toast";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,13 +10,10 @@ import { LabelInputContainer } from "@/components/custom/InputLabelContainer";
 import GradientSeparator from "@/components/custom/GradientSeparator";
 import { emailValidationRegExp, signInSchema } from "@/schemas/signInSchema";
 import { useAuth } from "@/hooks/useAuth";
-import { useSetRecoilState } from "recoil";
-import { userState } from "@/contexts/UserState";
 import Loader from "@/components/custom/Loader";
 import { Link } from "react-router-dom";
 
 export default function SignInPage() {
-   const setUser = useSetRecoilState(userState);
    const { signInUser, getCurrentUser } = useAuth();
    const {
       handleSubmit,
@@ -37,27 +33,13 @@ export default function SignInPage() {
          ? data.credentials
          : undefined;
 
-      const { response, errors } = await signInUser({
+      await signInUser({
          email,
          username,
          password: data.password,
       });
 
-      if (response && response.data.success) {
-         toast.success(response.data.message);
-
-         const { response: currentUserResponse } = await getCurrentUser();
-
-         if (currentUserResponse && currentUserResponse.data.success) {
-            setUser(currentUserResponse.data.data?.user);
-         }
-      }
-
-      if (errors && errors.response) {
-         toast.error(errors.response.data.message);
-      } else if (errors) {
-         toast.error(errors.message);
-      }
+      await getCurrentUser();
    };
 
    return (

@@ -3,32 +3,20 @@ import { useState } from "react";
 import { Menu, MenuItem, HoveredLink } from "../ui/navbar-menu";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { userState } from "@/contexts/UserState";
-import toast from "react-hot-toast";
 
 export default function Navbar({ className }: { className?: string }) {
    const [active, setActive] = useState<string | null>(null);
    const { signOutUser } = useAuth();
-   const [user, setUser] = useRecoilState(userState);
+   const user = useRecoilValue(userState);
 
    const handleClick = async () => {
       if (!user) {
          return;
       }
 
-      const { response, errors } = await signOutUser();
-
-      if (response && response.data.success) {
-         toast.success(response.data.message);
-         setUser(undefined);
-      }
-
-      if (errors && errors.response) {
-         toast.error(errors.response.data.message);
-      } else if (errors) {
-         toast.error(errors.message);
-      }
+      await signOutUser();
    };
 
    return (

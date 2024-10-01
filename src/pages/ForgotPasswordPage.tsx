@@ -9,7 +9,6 @@ import { forgotPasswordSchema } from "@/schemas/forgotPasswordSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "@radix-ui/react-label";
 import { Controller, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 
@@ -29,17 +28,10 @@ function ForgotPasswordPage() {
    const { forgotPassword } = useAuth();
 
    const submitHandler = async (data: z.infer<typeof forgotPasswordSchema>) => {
-      const { response, errors } = await forgotPassword(data);
+      const { response } = await forgotPassword(data);
 
       if (response?.data.success) {
-         toast.success(response.data.message);
          navigate("/reset-password");
-      }
-
-      if (errors && errors.response) {
-         toast.error(errors.response.data.message);
-      } else if (errors) {
-         toast.error(errors.message);
       }
    };
 
