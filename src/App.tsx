@@ -8,9 +8,6 @@ import { usePreviousLocation } from "./hooks/usePreviousLocation";
 import { SpecialRoutes } from "./components/custom/SpecialRoutes";
 import Loader from "./components/custom/Loader";
 import Container from "./components/custom/Container";
-import DeleteAccountPage from "./pages/DeleteAccountPage";
-import ForgotPasswordPage from "./pages/ForgotPasswordPage";
-import ResetPassword from "./pages/ResetPassword";
 import { useRecoilValue } from "recoil";
 
 const HomePage = lazy(() => import("@/pages/HomePage"));
@@ -18,6 +15,9 @@ const SignInPage = lazy(() => import("@/pages/SignInPage"));
 const SignUpPage = lazy(() => import("@/pages/SignUpPage"));
 const UserProfile = lazy(() => import("@/pages/UserProfile"));
 const VerifyEmail = lazy(() => import("@/pages/VerifyEmail"));
+const DeleteAccountPage = lazy(() => import("@/pages/DeleteAccountPage"));
+const ForgotPasswordPage = lazy(() => import("@/pages/ForgotPasswordPage"));
+const ResetPassword = lazy(() => import("@/pages/ResetPassword"));
 
 function App() {
    const { getCurrentUser, isLoading } = useAuth();
